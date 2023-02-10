@@ -2,6 +2,7 @@
 session_start();
 include_once "config/dbconnect.php";
 $email=$_SESSION['email'];
+$user_id=$_SESSION['user_id'];
 $products=$_GET['products'];
 if(isset($_POST['add_to_cart'])){
     $user=$_POST['user'];
@@ -401,7 +402,7 @@ https://www.tooplate.com/view/2127-little-fashion
     				</div>
     				<div class="col-sm-4 text-center">
     					<h3 class="mt-4 mb-3">Write Review Here</h3>
-                        <a href="product-detail.php?products=<?php echo $row['product_id'];?>" name="add_review" id="add_review" class="btn btn-primary">Review</a>
+                        <button type="button" name="add_review" id="add_review" class="btn btn-primary">Review</button>
     				</div>
     			</div>
     		</div>
@@ -433,14 +434,17 @@ https://www.tooplate.com/view/2127-little-fashion
                 while($row=mysqli_fetch_array($query))
                 {
                     $user_name=$row['username'];
-                
+                    
                 ?>
+                <div class="form-group">
+	        		<input type="hidden" name="user_id" id="user_id" value="<?php echo($user_id); ?>" class="form-control" placeholder="Enter Your user_id" />
+	        	</div>
+                <div class="form-group">
+	        		<input type="hidden" name="products" id="products" value="<?php echo($products); ?>" class="form-control" placeholder="Enter Your product_id" />
+	        	</div>
 	        	<div class="form-group">
 	        		<input type="text" name="user_name" id="user_name" value="<?php echo($user_name); ?>" class="form-control" placeholder="Enter Your Name" />
 	        	</div>
-                <?php
-                }
-                ?>
 	        	<div class="form-group">
 	        		<textarea name="user_review" id="user_review" class="form-control" placeholder="Type Review Here"></textarea>
 	        	</div>
@@ -451,7 +455,9 @@ https://www.tooplate.com/view/2127-little-fashion
     	</div>
   	</div>
 </div>
-
+<?php
+                }
+                ?>
 <style>
 .progress-label-left
 {
@@ -546,7 +552,7 @@ $(document).ready(function(){
             $.ajax({
                 url:"submit_rating.php",
                 method:"POST",
-                data:{rating_data:rating_data, user_name:user_name, user_review:user_review},
+                data:{rating_data:rating_data, user_review:user_review},
                 success:function(data)
                 {
                     $('#review_modal').modal('hide');
@@ -619,7 +625,7 @@ $(document).ready(function(){
 
                         html += '<div class="card">';
 
-                        html += '<div class="card-header"><b>'+data.review_data[count].user_name+'</b></div>';
+                        html += '<div class="card-header"><b>'+data.review_data[count].user_id+'</b></div>';
 
                         html += '<div class="card-body">';
 

@@ -1,28 +1,26 @@
+
 <?php
 
 //submit_rating.php
 
-session_start();
-include_once "config/dbconnect.php";
+$connect = new PDO("mysql:host=localhost;dbname=packaquipomin", "root", "");
 
 if(isset($_POST["rating_data"]))
 {
 
 	$data = array(
-        ':email'            =>  $_SESSION['email'],
-        ':user_id'          =>  $_SESSION['user_id'],
-        ':products'         =>  $_POST_['products'],
+		':user_id'		    =>	$_POST["user_id"],
+        ':product_id'		=>	$_POST["products"],
 		':user_rating'		=>	$_POST["rating_data"],
 		':user_review'		=>	$_POST["user_review"],
 		':datetime'			=>	time()
 	);
 
 	$query = "INSERT INTO review_table 
-	(user_id, user_rating, user_review,product_id,datetime) 
-	VALUES (:user_id, :user_rating, :user_review,:products:datetime)
-	";
+	(user_id, user_rating, user_review, datetime,product_id) 
+	VALUES (:user_id,:user_rating,:user_review,:datetime,:product_id)";
 
-	$statement = $conn->prepare($query);
+	$statement = $connect->prepare($query);
 
 	$statement->execute($data);
 
@@ -52,7 +50,7 @@ if(isset($_POST["action"]))
 	foreach($result as $row)
 	{
 		$review_content[] = array(
-			'user_name'		=>	$row["user_name"],
+			'user_id'		=>	$row["user_id"],
 			'user_review'	=>	$row["user_review"],
 			'rating'		=>	$row["user_rating"],
 			'datetime'		=>	date('l jS, F Y h:i:s A', $row["datetime"])
